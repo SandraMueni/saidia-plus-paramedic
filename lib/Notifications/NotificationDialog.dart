@@ -138,7 +138,7 @@ class NotificationDialog extends StatelessWidget
       if(theEmergencyId == tripDetails.victim_request_id)
       {
         emergencyRequestRef.set("accepted");
-        /*AssistantMethods.disableHomeTabLiveLocationUpdates();*/
+        AssistantMethods.disableHomeTabLiveLocationUpdates();
         Navigator.push(context, MaterialPageRoute(builder: (context)=> NewTripScreen(tripDetails: tripDetails)));
       }
       else if(theEmergencyId == "cancelled")

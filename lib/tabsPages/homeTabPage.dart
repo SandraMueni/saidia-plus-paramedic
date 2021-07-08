@@ -6,7 +6,7 @@ import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:paramedic_app/AllScreens/registrationScreen.dart';
-import 'package:paramedic_app/Models/allParamedics.dart';
+import 'package:paramedic_app/Models/paramedics.dart';
 import 'package:paramedic_app/Notifications/pushNotificationService.dart';
 import '../configMaps.dart';
 import '../main.dart';
@@ -24,8 +24,6 @@ class _HomeTabPageState extends State<HomeTabPage> {
   Completer<GoogleMapController> _controllerGoogleMap = Completer();
 
   GoogleMapController newGoogleMapController;
-
-  Position currentPosition;
 
   var geoLocator = Geolocator();
 
@@ -57,12 +55,12 @@ class _HomeTabPageState extends State<HomeTabPage> {
   {
     currentfirebaseUser = await FirebaseAuth.instance.currentUser;
 
-/*    paramedicsRef.child(currentfirebaseUser.uid).once().then((DataSnapshot dataSnapShot){
+    paramedicsRef.child(currentfirebaseUser.uid).once().then((DataSnapshot dataSnapShot){
       if(dataSnapShot.value != null)
       {
-        paramedicsInformation = Paramedics.fromSnapshot(dataSnapShot);
+        paramedicsInformation = Paramedic.fromSnapshot(dataSnapShot);
       }
-    });*/
+    });
 
     PushNotificationService pushNotificationService = PushNotificationService();
 

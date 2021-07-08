@@ -1,35 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:paramedic_app/Assistants/requestAssistant.dart';
-import 'package:paramedic_app/DataHandler/appData.dart';
-import 'package:paramedic_app/Models/address.dart';
 import 'package:paramedic_app/Models/directionDetails.dart';
 import 'package:paramedic_app/configMaps.dart';
-import 'package:provider/provider.dart';
 
 class AssistantMethods {
-  static Future<String> searchCoordinateAddress(Position position, context) async
-  {
-    String placeAddress = "";
-    String url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.latitude},${position.longitude}&key=$mapKey";
-
-    var response = await RequestAssistant.getRequest(url);
-
-    if (response != "failed") {
-      placeAddress = response["results"][0]["formatted_address"];
-
-      Address victimPickUpAddress = new Address();
-      victimPickUpAddress.longitude = position.longitude;
-      victimPickUpAddress.latitude = position.latitude;
-      victimPickUpAddress.placeName = placeAddress;
-
-      Provider.of<AppData>(context, listen: false).updatePickUpLocationAddress(victimPickUpAddress);
-    }
-
-    return placeAddress;
-  }
 
   static Future<DirectionDetails>obtainPlaceDirectionDetails(LatLng initialPosition, LatLng finalPosition) async
   {
@@ -69,17 +44,16 @@ class AssistantMethods {
     return totalLocalAmount.truncate();
   }
 
-  static void getCurrentOnlineVictimInfo() async
+  static void disableHomeTabLiveLocationUpdates()
   {
-    firebaseUser = await FirebaseAuth.instance.currentUser;
-    String victimId = firebaseUser.uid;
-    DatabaseReference reference = FirebaseDatabase.instance.reference().child("Victims").child(victimId);
-
-    reference.once().then((DataSnapshot dataSnapShot) {
-      if (dataSnapShot.value != null)
-      {
-        //victimCurrentInfo = Victims.fromSnapshot(dataSnapShot);
-      }
-    });
+    homeTabPageStreamSubscription.pause();
+    Geofire.removeLocation(currentfirebaseUser.uid);
   }
+
+  static void enableHomeTabLiveLocationUpdates()
+  {
+    homeTabPageStreamSubscription.resume();
+    Geofire.setLocation(currentfirebaseUser.uid, currentPosition.latitude, currentPosition.longitude);
+  }
+
 }
