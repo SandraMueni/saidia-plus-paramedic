@@ -1,9 +1,13 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:paramedic_app/AllScreens/registrationScreen.dart';
+import 'package:paramedic_app/Models/allParamedics.dart';
+import 'package:paramedic_app/Notifications/pushNotificationService.dart';
 import '../configMaps.dart';
 import '../main.dart';
 
@@ -31,6 +35,13 @@ class _HomeTabPageState extends State<HomeTabPage> {
 
   bool isParamedicAvailable = false;
 
+  @override
+  void initState() {
+    super.initState();
+
+    getCurrentParamedicInfo();
+  }
+
   void locatePosition() async
   {
     Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
@@ -40,6 +51,23 @@ class _HomeTabPageState extends State<HomeTabPage> {
 
     CameraPosition cameraPosition = new CameraPosition(target: latLatPosition, zoom: 14);
     newGoogleMapController.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+  }
+
+  void getCurrentParamedicInfo() async
+  {
+    currentfirebaseUser = await FirebaseAuth.instance.currentUser;
+
+/*    paramedicsRef.child(currentfirebaseUser.uid).once().then((DataSnapshot dataSnapShot){
+      if(dataSnapShot.value != null)
+      {
+        paramedicsInformation = Paramedics.fromSnapshot(dataSnapShot);
+      }
+    });*/
+
+    PushNotificationService pushNotificationService = PushNotificationService();
+
+    pushNotificationService.initialize(context);
+    pushNotificationService.getToken();
   }
 
   @override
@@ -130,6 +158,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
     Geofire.initialize("Available_Paramedics");
     Geofire.setLocation(currentfirebaseUser.uid, currentPosition.latitude, currentPosition.longitude);
 
+    emergencyRequestRef.set("searching");
     emergencyRequestRef.onValue.listen((event) { });
   }
 

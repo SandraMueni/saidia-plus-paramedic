@@ -23,6 +23,7 @@ void main() async {
 
 DatabaseReference victimsRef = FirebaseDatabase.instance.reference().child("Victims");
 DatabaseReference paramedicsRef = FirebaseDatabase.instance.reference().child("Paramedics");
+DatabaseReference newRequestRef = FirebaseDatabase.instance.reference().child("Victim Requests");
 DatabaseReference emergencyRequestRef = FirebaseDatabase.instance.reference().child("Paramedics").child(currentfirebaseUser.uid).child("newEmergency");
 
 class MyApp extends StatelessWidget {

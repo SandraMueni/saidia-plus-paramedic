@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:paramedic_app/AllScreens/mainscreen.dart';
 import 'package:paramedic_app/AllScreens/registrationScreen.dart';
 import 'package:paramedic_app/configMaps.dart';
