@@ -47,7 +47,24 @@ class AssistantMethods {
     //1$ = 108 Kshs
     double totalLocalAmount = totalFareAmount * 108;
 
-    return totalLocalAmount.truncate();
+    if(tripType == "Type-1")
+    {
+      double result = (totalLocalAmount.truncate()) / 2.0;
+      return result.truncate();
+    }
+    else if(tripType == "Type-2")
+    {
+      return totalLocalAmount.truncate();
+    }
+    else if(tripType == "Type-3")
+    {
+      double result = (totalLocalAmount.truncate()) * 2.0;
+      return result.truncate();
+    }
+    else
+    {
+      return totalLocalAmount.truncate();
+    }
   }
 
   static void disableHomeTabLiveLocationUpdates()

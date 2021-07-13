@@ -11,6 +11,10 @@ class AmbulanceInfoScreen extends StatelessWidget
   TextEditingController ambulanceNumberTextEditingController = TextEditingController();
   TextEditingController ambulanceTypeTextEditingController = TextEditingController();
 
+  List<String> ambulanceTypesList = ['Type-1', 'Type-2', 'Type-3'];
+
+  String selectedAmbulanceType;
+
   @override
   Widget build(BuildContext context)
   {
@@ -48,14 +52,24 @@ class AmbulanceInfoScreen extends StatelessWidget
                       style: TextStyle(fontSize: 15.0),
                     ),
 
-                    SizedBox(height: 10.0,),
-                    TextField(
-                      controller: ambulanceTypeTextEditingController,
-                      decoration: InputDecoration(
-                        labelText: "Ambulance Type",
-                        hintStyle: TextStyle(color: Colors.grey, fontSize: 10.0),
-                      ),
-                      style: TextStyle(fontSize: 15.0),
+                    SizedBox(height:26.0,),
+
+                    DropdownButton(
+                      iconSize: 40,
+                      hint: Text('Please choose Ambulance Type'),
+                      value: selectedAmbulanceType,
+                      onChanged: (newValue)
+                      {
+                          selectedAmbulanceType = newValue;
+                          displayToastMessage(selectedAmbulanceType + " selected", context);
+                      },
+                      items: ambulanceTypesList.map((ambulance)
+                      {
+                        return DropdownMenuItem(
+                          child: new Text(ambulance),
+                          value: ambulance,
+                        );
+                      }).toList(),
                     ),
 
                     SizedBox(height: 42.0,),
@@ -73,9 +87,9 @@ class AmbulanceInfoScreen extends StatelessWidget
                           {
                             displayToastMessage("Please provide Ambulance registration number ", context);
                           }
-                          else if(ambulanceTypeTextEditingController.text.isEmpty)
+                          else if(selectedAmbulanceType == null)
                           {
-                            displayToastMessage("Please provide Ambulance registration type ", context);
+                            displayToastMessage("Please select Ambulance type ", context);
                           }
                           else
                           {
@@ -113,7 +127,7 @@ class AmbulanceInfoScreen extends StatelessWidget
     {
       "ambulance_name": ambulanceNameTextEditingController.text,
       "ambulance_number": ambulanceNumberTextEditingController.text,
-      "ambulance_type": ambulanceTypeTextEditingController.text,
+      "ambulance_type": selectedAmbulanceType,
     };
 
     paramedicsRef.child(paramedicId).child("ambulance_details").set(ambulanceInfoMap);

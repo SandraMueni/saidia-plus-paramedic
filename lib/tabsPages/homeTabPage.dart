@@ -41,6 +41,19 @@ class _HomeTabPageState extends State<HomeTabPage> {
     getCurrentParamedicInfo();
   }
 
+  getTripType()
+  {
+    paramedicsRef.child(currentfirebaseUser.uid).child("ambulance_details").child("ambulance_type").once().then((DataSnapshot snapshot)
+    {
+      if(snapshot.value != null)
+      {
+        setState(() {
+          tripType = snapshot.value.toString();
+        });
+      }
+    });
+  }
+
   void locatePosition() async
   {
     Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
@@ -69,6 +82,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
     pushNotificationService.getToken();
 
     AssistantMethods.retrieveHistoryInfo(context);
+    getTripType();
   }
 
   @override
