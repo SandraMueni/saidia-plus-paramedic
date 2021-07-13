@@ -1,19 +1,34 @@
 import 'package:flutter/cupertino.dart';
-import 'package:paramedic_app/Models/address.dart';
+import 'package:paramedic_app/Models/history.dart';
 
 class AppData extends ChangeNotifier
 {
-  Address pickUpLocation, dropOffLocation;
+  String earnings = "0";
+  int countTrips = 0;
+  List<String> tripHistoryKeys = [];
+  List<History> tripHistoryDataList = [];
 
-  void updatePickUpLocationAddress(Address pickUpAddress)
+  void updateEarnings(String updatedEarnings)
   {
-    pickUpLocation = pickUpAddress;
+    earnings = updatedEarnings;
     notifyListeners();
   }
 
-  void updateDropOffLocationAddress(Address dropOffAddress)
+  void updateTripsCounter(int tripCounter)
   {
-    dropOffLocation = dropOffAddress;
+    countTrips = tripCounter;
+    notifyListeners();
+  }
+
+  void updateTripKeys(List<String> newKeys)
+  {
+    tripHistoryKeys = newKeys;
+    notifyListeners();
+  }
+
+  void updateTripHistoryData(History eachHistory)
+  {
+    tripHistoryDataList.add(eachHistory);
     notifyListeners();
   }
 }

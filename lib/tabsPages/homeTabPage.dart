@@ -6,6 +6,7 @@ import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:paramedic_app/AllScreens/registrationScreen.dart';
+import 'package:paramedic_app/Assistants/assistantMethods.dart';
 import 'package:paramedic_app/Models/paramedics.dart';
 import 'package:paramedic_app/Notifications/pushNotificationService.dart';
 import '../configMaps.dart';
@@ -66,6 +67,8 @@ class _HomeTabPageState extends State<HomeTabPage> {
 
     pushNotificationService.initialize(context);
     pushNotificationService.getToken();
+
+    AssistantMethods.retrieveHistoryInfo(context);
   }
 
   @override
