@@ -75,22 +75,22 @@ class PushNotificationService
 
         String paymentMethod = dataSnapshot.value['payment_method'].toString();
 
-        String victim_name = dataSnapshot.value["victim_name"];
-        String victim_contact = dataSnapshot.value["victim_contact"];
+        String victimName = dataSnapshot.value["victim_name"];
+        String victimContact = dataSnapshot.value["victim_contact"];
 
         TripDetails tripDetails = TripDetails();
-        tripDetails.victim_request_id = tripRequestId;
-        tripDetails.pickup_address = pickUpAddress;
-        tripDetails.dropoff_address = dropOffAddress;
-        tripDetails.pickup_coordinates = LatLng(pickUpLocationLat,pickUpLocationLng);
-        tripDetails.dropoff_coordinates = LatLng(dropOffLocationLat, dropOffLocationLng);
-        tripDetails.payment_method = paymentMethod;
-        tripDetails.victim_name = victim_name;
-        tripDetails.victim_contact = victim_contact;
+        tripDetails.victimRequestId = tripRequestId;
+        tripDetails.pickupAddress = pickUpAddress;
+        tripDetails.dropoffAddress = dropOffAddress;
+        tripDetails.pickupCoordinates = LatLng(pickUpLocationLat,pickUpLocationLng);
+        tripDetails.dropoffCoordinates = LatLng(dropOffLocationLat, dropOffLocationLng);
+        tripDetails.paymentMethod = paymentMethod;
+        tripDetails.victimName = victimName;
+        tripDetails.victimContact = victimContact;
 
         print("Information :: ");
-        print(tripDetails.pickup_address);
-        print(tripDetails.dropoff_address);
+        print(tripDetails.pickupAddress);
+        print(tripDetails.dropoffAddress);
 
         showDialog(
           context: context,

@@ -2,24 +2,24 @@ import 'package:firebase_database/firebase_database.dart';
 
 class Paramedic
 {
-  String paramedic_name;
-  String paramedic_contact;
-  String paramedic_email;
-  String paramedic_id;
-  String ambulance_name;
-  String ambulance_number;
-  String ambulance_type;
+  String paramedicName;
+  String paramedicContact;
+  String paramedicEmail;
+  String paramedicId;
+  String ambulanceName;
+  String ambulanceNumber;
+  String ambulanceType;
 
-  Paramedic({this.paramedic_name, this.paramedic_contact, this.paramedic_email, this.paramedic_id, this.ambulance_name, this.ambulance_number, this.ambulance_type,});
+  Paramedic({this.paramedicName, this.paramedicContact, this.paramedicEmail, this.paramedicId, this.ambulanceName, this.ambulanceNumber, this.ambulanceType,});
 
   Paramedic.fromSnapshot(DataSnapshot dataSnapshot)
   {
-    paramedic_id = dataSnapshot.key;
-    paramedic_contact = dataSnapshot.value["paramedic_contact"];
-    paramedic_email = dataSnapshot.value["paramedic_email"];
-    paramedic_name = dataSnapshot.value["paramedic_name"];
-    ambulance_name = dataSnapshot.value["ambulance_details"]["ambulance_name"];
-    ambulance_number = dataSnapshot.value["ambulance_details"]["ambulance_number"];
-    ambulance_type = dataSnapshot.value["ambulance_details"]["ambulance_type"];
+    paramedicId = dataSnapshot.key;
+    paramedicContact = dataSnapshot.value["paramedic_contact"];
+    paramedicEmail = dataSnapshot.value["paramedic_email"];
+    paramedicName = dataSnapshot.value["paramedic_name"];
+    ambulanceName = dataSnapshot.value["ambulance_details"]["ambulance_name"];
+    ambulanceNumber = dataSnapshot.value["ambulance_details"]["ambulance_number"];
+    ambulanceType = dataSnapshot.value["ambulance_details"]["ambulance_type"];
   }
 }

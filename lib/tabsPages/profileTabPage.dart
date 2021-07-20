@@ -17,7 +17,7 @@ class ProfileTabPage extends StatelessWidget {
           children: [
 
             Text(
-              paramedicsInformation.paramedic_name,
+              paramedicsInformation.paramedicName,
               style: TextStyle(
                 fontSize: 40.0,
                 color: Colors.white,
@@ -48,7 +48,7 @@ class ProfileTabPage extends StatelessWidget {
             SizedBox(height: 40.0,),
 
             InfoCard(
-              text: paramedicsInformation.paramedic_contact,
+              text: paramedicsInformation.paramedicContact,
               icon: Icons.phone,
               onPressed: () async {
                 print("this is phone.");
@@ -56,7 +56,7 @@ class ProfileTabPage extends StatelessWidget {
             ),
 
             InfoCard(
-              text: paramedicsInformation.paramedic_email,
+              text: paramedicsInformation.paramedicEmail,
               icon: Icons.email,
               onPressed: () async {
                 print("this is email.");
@@ -64,7 +64,7 @@ class ProfileTabPage extends StatelessWidget {
             ),
 
             InfoCard(
-              text: paramedicsInformation.ambulance_name + " - " + paramedicsInformation.ambulance_number,
+              text: paramedicsInformation.ambulanceName + " - " + paramedicsInformation.ambulanceNumber,
               icon: Icons.car_repair,
               onPressed: () async {
                 print("this is ambulance info.");
