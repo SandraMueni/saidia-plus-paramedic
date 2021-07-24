@@ -7,7 +7,6 @@ import 'package:paramedic_app/configMaps.dart';
 import 'package:paramedic_app/main.dart';
 import 'package:paramedic_app/AllWidgets/progressDialog.dart';
 
-// ignore: must_be_immutable
 class RegistrationScreen extends StatelessWidget
 {
 
@@ -192,7 +191,7 @@ class RegistrationScreen extends StatelessWidget
                         }
                         else
                         {
-                          registerNewVictim(context);
+                          registerNewParamedic(context);
                         }
                       },
                     ),
@@ -217,7 +216,7 @@ class RegistrationScreen extends StatelessWidget
   }
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  void registerNewVictim(BuildContext context) async
+  void registerNewParamedic(BuildContext context) async
   {
     showDialog(
         context: context,
@@ -239,11 +238,12 @@ class RegistrationScreen extends StatelessWidget
 
     if(firebaseUser != null) //victim created
         {
-      //victim user info to database
+      //paramedic user info to database
       Map paramedicDataMap = {
         "paramedic_name": nameTextEditingController.text.trim(),
         "paramedic_email": emailTextEditingController.text.trim(),
         "paramedic_contact": phoneTextEditingController.text.trim(),
+        "is_verfied": false,
       };
 
       paramedicsRef.child(firebaseUser.uid).set(paramedicDataMap);

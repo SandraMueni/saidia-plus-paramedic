@@ -7,7 +7,6 @@ import 'package:paramedic_app/configMaps.dart';
 import 'package:paramedic_app/main.dart';
 import 'package:paramedic_app/AllWidgets/progressDialog.dart';
 
-// ignore: must_be_immutable
 class LoginScreen extends StatelessWidget
 {
   static const String idScreen = "login";
@@ -120,7 +119,7 @@ class LoginScreen extends StatelessWidget
                         }
                         else
                         {
-                          loginAndAuthenticateParamedic(context);
+                          verifyParamedic(context);
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -154,6 +153,46 @@ class LoginScreen extends StatelessWidget
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
+  //Check paramedics verification status
+  void verifyParamedic(BuildContext context) async
+  {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context)
+        {
+          return ProgressDialog(message: "Verifying, Please wait...",);
+        }
+    );
+
+    final User firebaseUser = (await _firebaseAuth.signInWithEmailAndPassword(email: emailTextEditingController.text, password: passwordTextEditingController.text).catchError((errMsg)
+    {
+      Navigator.pop(context);
+      displayToastMessage("Error: " + errMsg.toString(), context);
+    })).user;
+
+    if(firebaseUser != null)
+    {
+      verifyRequestRef.once().then((DataSnapshot snap){
+        if(snap.value != "false")
+        {
+          loginAndAuthenticateParamedic(context);
+        }
+        else
+        {
+          Navigator.pop(context);
+          _firebaseAuth.signOut();
+          displayToastMessage("Paramedic details haven't been verified yet. Try Again later.", context);
+        }
+      });
+    }
+    else
+    {
+      Navigator.pop(context);
+      displayToastMessage("Error Occurred, can not be Signed-in.", context);
+    }
+  }
+
   void loginAndAuthenticateParamedic(BuildContext context) async
   {
 
@@ -166,11 +205,8 @@ class LoginScreen extends StatelessWidget
         }
     );
 
-    final User firebaseUser = (await _firebaseAuth
-        .signInWithEmailAndPassword(
-        email: emailTextEditingController.text,
-        password: passwordTextEditingController.text
-    ).catchError((errMsg){
+    final User firebaseUser = (await _firebaseAuth.signInWithEmailAndPassword(email: emailTextEditingController.text, password: passwordTextEditingController.text).catchError((errMsg)
+    {
       Navigator.pop(context);
       displayToastMessage("Error: " + errMsg.toString(), context);
     })).user;

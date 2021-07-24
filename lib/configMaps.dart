@@ -27,3 +27,5 @@ StreamSubscription<Position> tripStreamSubscription;
 
 String tripType="";
 
+String title = "";
+

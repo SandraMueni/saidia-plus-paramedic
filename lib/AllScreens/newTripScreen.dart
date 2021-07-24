@@ -95,7 +95,7 @@ class _NewTripScreenState extends State<NewTripScreen>
           oldPos = mPostion;
           updateTripDetails();
 
-          String tripRequestId = widget.tripDetails.victim_request_id;
+          String tripRequestId = widget.tripDetails.victimRequestId;
           Map locMap =
           {
             "latitude": currentPosition.latitude.toString(),
@@ -132,7 +132,7 @@ class _NewTripScreenState extends State<NewTripScreen>
               });
 
               var currentLatLng = LatLng(currentPosition.latitude, currentPosition.longitude);
-              var pickUpLatLng = widget.tripDetails.pickup_coordinates;
+              var pickUpLatLng = widget.tripDetails.pickupCoordinates;
 
               await getPlaceDirection(currentLatLng, pickUpLatLng);
 
@@ -174,7 +174,7 @@ class _NewTripScreenState extends State<NewTripScreen>
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(widget.tripDetails.victim_name, style: TextStyle(fontFamily: "Poppins-Bold", fontSize: 24.0),),
+                        Text(widget.tripDetails.victimName, style: TextStyle(fontFamily: "Poppins-Bold", fontSize: 24.0),),
                         Padding(
                           padding: EdgeInsets.only(right: 10.0),
                           child: Icon(Icons.phone_android),
@@ -190,7 +190,7 @@ class _NewTripScreenState extends State<NewTripScreen>
                         SizedBox(width: 18.0,),
                         Expanded(
                           child: Container(
-                            child: Text(widget.tripDetails.pickup_address, style: TextStyle(fontSize: 18.0),
+                            child: Text(widget.tripDetails.pickupAddress, style: TextStyle(fontSize: 18.0),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
@@ -207,7 +207,7 @@ class _NewTripScreenState extends State<NewTripScreen>
                         Expanded(
                           child: Container(
                             child: Text(
-                              widget.tripDetails.dropoff_address,
+                              widget.tripDetails.dropoffAddress,
                               style: TextStyle(fontSize: 18.0),
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -226,7 +226,7 @@ class _NewTripScreenState extends State<NewTripScreen>
                           if(status == "accepted")
                           {
                             status = "arrived";
-                            String tripRequestId = widget.tripDetails.victim_request_id;
+                            String tripRequestId = widget.tripDetails.victimRequestId;
                             newRequestRef.child(tripRequestId).child("status").set(status);
 
                             setState(() {
@@ -240,14 +240,14 @@ class _NewTripScreenState extends State<NewTripScreen>
                               builder: (BuildContext context)=> ProgressDialog(message: "Please wait...",),
                             );
 
-                            await getPlaceDirection(widget.tripDetails.pickup_coordinates, widget.tripDetails.dropoff_coordinates);
+                            await getPlaceDirection(widget.tripDetails.pickupCoordinates, widget.tripDetails.dropoffCoordinates);
 
                             Navigator.pop(context);
                           }
                           else if(status == "arrived")
                           {
                             status = "ontrip";
-                            String tripRequestId = widget.tripDetails.victim_request_id;
+                            String tripRequestId = widget.tripDetails.victimRequestId;
                             newRequestRef.child(tripRequestId).child("status").set(status);
 
                             setState(() {
@@ -398,12 +398,12 @@ class _NewTripScreenState extends State<NewTripScreen>
 
   void acceptEmergencyRequest()
   {
-    String emergencyRequestId = widget.tripDetails.victim_request_id;
+    String emergencyRequestId = widget.tripDetails.victimRequestId;
     newRequestRef.child(emergencyRequestId).child("status").set("accepted");
-    newRequestRef.child(emergencyRequestId).child("paramedic_name").set(paramedicsInformation.paramedic_name);
-    newRequestRef.child(emergencyRequestId).child("paramedic_contact").set(paramedicsInformation.paramedic_contact);
-    newRequestRef.child(emergencyRequestId).child("paramedic_id").set(paramedicsInformation.paramedic_id);
-    newRequestRef.child(emergencyRequestId).child("ambulance_details").set('${paramedicsInformation.ambulance_name} - ${paramedicsInformation.ambulance_number}');
+    newRequestRef.child(emergencyRequestId).child("paramedic_name").set(paramedicsInformation.paramedicName);
+    newRequestRef.child(emergencyRequestId).child("paramedic_contact").set(paramedicsInformation.paramedicContact);
+    newRequestRef.child(emergencyRequestId).child("paramedic_id").set(paramedicsInformation.paramedicId);
+    newRequestRef.child(emergencyRequestId).child("ambulance_details").set('${paramedicsInformation.ambulanceName} - ${paramedicsInformation.ambulanceNumber}');
 
     Map locMap =
     {
@@ -428,10 +428,10 @@ class _NewTripScreenState extends State<NewTripScreen>
       LatLng destinationLatLng;
 
       if (status == "accepted") {
-        destinationLatLng = widget.tripDetails.pickup_coordinates;
+        destinationLatLng = widget.tripDetails.pickupCoordinates;
       }
       else {
-        destinationLatLng = widget.tripDetails.dropoff_coordinates;
+        destinationLatLng = widget.tripDetails.dropoffCoordinates;
       }
 
       var directionDetails = await AssistantMethods.obtainPlaceDirectionDetails(
@@ -466,13 +466,13 @@ class _NewTripScreenState extends State<NewTripScreen>
 
     var currentLatLng = LatLng(myPosition.latitude, myPosition.longitude);
 
-    var directionalDetails = await AssistantMethods.obtainPlaceDirectionDetails(widget.tripDetails.pickup_coordinates, currentLatLng);
+    var directionalDetails = await AssistantMethods.obtainPlaceDirectionDetails(widget.tripDetails.pickupCoordinates, currentLatLng);
 
     Navigator.pop(context);
 
     int fareAmount = AssistantMethods.calculateFares(directionalDetails);
 
-    String tripRequestId = widget.tripDetails.victim_request_id;
+    String tripRequestId = widget.tripDetails.victimRequestId;
     newRequestRef.child(tripRequestId).child("charges").set(fareAmount.toString());
     newRequestRef.child(tripRequestId).child("status").set("ended");
     tripStreamSubscription.cancel();
@@ -480,7 +480,7 @@ class _NewTripScreenState extends State<NewTripScreen>
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (BuildContext context)=> CollectFareDialog(paymentMethod: widget.tripDetails.payment_method, fareAmount: fareAmount,),
+      builder: (BuildContext context)=> CollectFareDialog(paymentMethod: widget.tripDetails.paymentMethod, fareAmount: fareAmount,),
     );
 
     saveEarnings(fareAmount);

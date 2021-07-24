@@ -45,7 +45,7 @@ class NotificationDialog extends StatelessWidget
                       Image.asset("images/pickicon.png", height: 16.0, width: 16.0,),
                       SizedBox(width: 20.0,),
                       Expanded(
-                        child:Container(child: Text(tripDetails.pickup_address, style: TextStyle(fontSize: 18.0),)),
+                        child:Container(child: Text(tripDetails.pickupAddress, style: TextStyle(fontSize: 18.0),)),
                       ),
                     ],
                   ),
@@ -56,7 +56,7 @@ class NotificationDialog extends StatelessWidget
                       Image.asset("images/desticon.png", height: 16.0, width: 16.0,),
                       SizedBox(width: 20.0,),
                       Expanded(
-                          child: Container(child: Text(tripDetails.dropoff_address, style: TextStyle(fontSize: 18.0),))
+                          child: Container(child: Text(tripDetails.dropoffAddress, style: TextStyle(fontSize: 18.0),))
                       ),
                     ],
                   ),
@@ -135,7 +135,7 @@ class NotificationDialog extends StatelessWidget
       }
 
 
-      if(theEmergencyId == tripDetails.victim_request_id)
+      if(theEmergencyId == tripDetails.victimRequestId)
       {
         emergencyRequestRef.set("accepted");
         AssistantMethods.disableHomeTabLiveLocationUpdates();

@@ -1,19 +1,72 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:paramedic_app/Models/address.dart';
+import 'package:paramedic_app/Models/history.dart';
+import '../configMaps.dart';
+import '../main.dart';
 
 class AppData extends ChangeNotifier
 {
-  Address pickUpLocation, dropOffLocation;
+  String earnings = "0";
+  int countTrips = 0;
+  int tripCounter = 0;
+  List<String> tripHistoryKeys = [];
+  List<History> tripHistoryDataList = [];
 
-  void updatePickUpLocationAddress(Address pickUpAddress)
-  {
-    pickUpLocation = pickUpAddress;
+  String get allEarnings{
+    return earnings;
+  }
+
+  int get allTrips{
+    return tripCounter;
+  }
+
+  Future<void> fetchAllHistory()async{
+    //retrieve and display Earnings
+    paramedicsRef.child(currentfirebaseUser.uid).child("earnings").once().then((DataSnapshot dataSnapshot)
+    {
+      if(dataSnapshot.value != null)
+      {
+        earnings = dataSnapshot.value.toString();
+
+      }
+    });
+    //retrieve and display Earnings
+    paramedicsRef.child(currentfirebaseUser.uid).child("history").once().then((DataSnapshot dataSnapshot)
+    {
+      if(dataSnapshot.value != null)
+      {
+        //update total number of trip counts to provider
+        Map<dynamic, dynamic> keys = dataSnapshot.value;
+        tripCounter = keys.length;
+
+      }
+    });
     notifyListeners();
   }
 
-  void updateDropOffLocationAddress(Address dropOffAddress)
+
+  void updateEarnings(String updatedEarnings)
   {
-    dropOffLocation = dropOffAddress;
+    earnings = updatedEarnings;
+    notifyListeners();
+  }
+
+  void updateTripsCounter(int tripCounter)
+  {
+    countTrips = tripCounter;
+    notifyListeners();
+  }
+
+  void updateTripKeys(List<String> newKeys)
+  {
+    tripHistoryKeys = newKeys;
+    notifyListeners();
+  }
+
+  void updateTripHistoryData(History eachHistory)
+  {
+    tripHistoryDataList.add(eachHistory);
+    tripHistoryDataList.sort((a,b) => b.timeCreated.compareTo(a.timeCreated));
     notifyListeners();
   }
 }

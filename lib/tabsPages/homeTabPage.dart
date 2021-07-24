@@ -3,9 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
+import 'package:flutter_restart/flutter_restart.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:paramedic_app/AllScreens/registrationScreen.dart';
+import 'package:paramedic_app/Assistants/assistantMethods.dart';
 import 'package:paramedic_app/Models/paramedics.dart';
 import 'package:paramedic_app/Notifications/pushNotificationService.dart';
 import '../configMaps.dart';
@@ -40,6 +42,19 @@ class _HomeTabPageState extends State<HomeTabPage> {
     getCurrentParamedicInfo();
   }
 
+  getTripType()
+  {
+    paramedicsRef.child(currentfirebaseUser.uid).child("ambulance_details").child("ambulance_type").once().then((DataSnapshot snapshot)
+    {
+      if(snapshot.value != null)
+      {
+        setState(() {
+          tripType = snapshot.value.toString();
+        });
+      }
+    });
+  }
+
   void locatePosition() async
   {
     Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
@@ -66,6 +81,9 @@ class _HomeTabPageState extends State<HomeTabPage> {
 
     pushNotificationService.initialize(context);
     pushNotificationService.getToken();
+
+    AssistantMethods.retrieveHistoryInfo(context);
+    getTripType();
   }
 
   @override
@@ -180,5 +198,10 @@ class _HomeTabPageState extends State<HomeTabPage> {
     emergencyRequestRef.onDisconnect();
     emergencyRequestRef.remove();
     emergencyRequestRef = null;
+    _restartApp();
+  }
+
+  void _restartApp() async {
+    FlutterRestart.restartApp();
   }
 }
