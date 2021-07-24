@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:paramedic_app/Assistants/assistantMethods.dart';
-
 import '../configMaps.dart';
 
 class CollectFareDialog extends StatelessWidget

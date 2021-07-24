@@ -7,8 +7,7 @@ import 'package:paramedic_app/configMaps.dart';
 import 'package:paramedic_app/main.dart';
 import 'package:paramedic_app/AllWidgets/progressDialog.dart';
 
-class LoginScreen extends StatelessWidget
-{
+class LoginScreen extends StatelessWidget {
   static const String idScreen = "login";
   TextEditingController emailTextEditingController = TextEditingController();
   TextEditingController passwordTextEditingController = TextEditingController();
@@ -22,26 +21,35 @@ class LoginScreen extends StatelessWidget
           padding: EdgeInsets.all(20.0),
           child: Column(
             children: [
-              SizedBox(height: 80.0,),
+              SizedBox(
+                height: 80.0,
+              ),
               Text(
                 "Saidia Plus+",
-                style: TextStyle(fontSize: 40.0, fontFamily: "Poppins-Bold", color: Colors.white),
+                style: TextStyle(
+                    fontSize: 40.0,
+                    fontFamily: "Poppins-Bold",
+                    color: Colors.white),
                 textAlign: TextAlign.center,
               ),
-
-              SizedBox(height: 70.0,),
+              SizedBox(
+                height: 70.0,
+              ),
               Text(
                 "Login as a Paramedic",
-                style: TextStyle(fontSize: 24.0, fontFamily: "Poppins-Regular", color: Colors.white),
+                style: TextStyle(
+                    fontSize: 24.0,
+                    fontFamily: "Poppins-Regular",
+                    color: Colors.white),
                 textAlign: TextAlign.center,
               ),
-
               Padding(
                 padding: EdgeInsets.all(20.0),
                 child: Column(
                   children: [
-
-                    SizedBox(height: 10.0,),
+                    SizedBox(
+                      height: 10.0,
+                    ),
                     TextField(
                       controller: emailTextEditingController,
                       keyboardType: TextInputType.emailAddress,
@@ -66,8 +74,9 @@ class LoginScreen extends StatelessWidget
                       ),
                       style: TextStyle(fontSize: 20.0, color: Colors.white),
                     ),
-
-                    SizedBox(height: 10.0,),
+                    SizedBox(
+                      height: 10.0,
+                    ),
                     TextField(
                       controller: passwordTextEditingController,
                       obscureText: true,
@@ -92,34 +101,34 @@ class LoginScreen extends StatelessWidget
                       ),
                       style: TextStyle(fontSize: 20.0, color: Colors.white),
                     ),
-
-                    SizedBox(height: 40.0,),
+                    SizedBox(
+                      height: 40.0,
+                    ),
                     ElevatedButton(
                       child: Container(
                         height: 55.0,
                         child: Center(
                           child: Text(
                             "Login",
-                            style: TextStyle(fontSize: 22.0, fontFamily: "Poppins-Bold"),
+                            style: TextStyle(
+                                fontSize: 22.0, fontFamily: "Poppins-Bold"),
                           ),
                         ),
                       ),
                       onPressed: () {
-                        if(!emailTextEditingController.text.contains("@"))
-                        {
-                          displayToastMessage("Email address is not Valid.", context);
-                        }
-                        else if(passwordTextEditingController.text.isEmpty)
-                        {
-                          displayToastMessage("Password is mandatory.", context);
-                        }
-                        else if(passwordTextEditingController.text.length < 6)
-                        {
-                          displayToastMessage("Password must be at least 6 Characters.", context);
-                        }
-                        else
-                        {
-                          verifyParamedic(context);
+                        if (!emailTextEditingController.text.contains("@")) {
+                          displayToastMessage(
+                              "Email address is not Valid.", context);
+                        } else if (passwordTextEditingController.text.isEmpty) {
+                          displayToastMessage(
+                              "Password is mandatory.", context);
+                        } else if (passwordTextEditingController.text.length <
+                            6) {
+                          displayToastMessage(
+                              "Password must be at least 6 Characters.",
+                              context);
+                        } else {
+                          loginAndAuthenticateParamedic(context);
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -133,11 +142,10 @@ class LoginScreen extends StatelessWidget
                   ],
                 ),
               ),
-
               TextButton(
-                onPressed: ()
-                {
-                  Navigator.pushNamedAndRemoveUntil(context, RegistrationScreen.idScreen, (route) => false);
+                onPressed: () {
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, RegistrationScreen.idScreen, (route) => false);
                 },
                 child: Text(
                   "Do not have an Account? Register Here",
@@ -153,86 +161,58 @@ class LoginScreen extends StatelessWidget
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  //Check paramedics verification status
-  void verifyParamedic(BuildContext context) async
-  {
+  void loginAndAuthenticateParamedic(BuildContext context) async {
     showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (BuildContext context)
-        {
-          return ProgressDialog(message: "Verifying, Please wait...",);
-        }
-    );
+        builder: (BuildContext context) {
+          return ProgressDialog(
+            message: "Authenticating, Please wait...",
+          );
+        });
 
-    final User firebaseUser = (await _firebaseAuth.signInWithEmailAndPassword(email: emailTextEditingController.text, password: passwordTextEditingController.text).catchError((errMsg)
-    {
+    final User firebaseUser = (await _firebaseAuth
+        .signInWithEmailAndPassword(
+        email: emailTextEditingController.text,
+        password: passwordTextEditingController.text)
+        .catchError((errMsg) {
       Navigator.pop(context);
       displayToastMessage("Error: " + errMsg.toString(), context);
     })).user;
 
-    if(firebaseUser != null)
-    {
-      verifyRequestRef.once().then((DataSnapshot snap){
-        if(snap.value != "false")
+    if (firebaseUser != null) {
+      //Verify Paramedic
+      paramedicsRef
+          .child(firebaseUser.uid)
+          .once()
+          .then((DataSnapshot datasnap) {
         {
-          loginAndAuthenticateParamedic(context);
-        }
-        else
-        {
-          Navigator.pop(context);
-          _firebaseAuth.signOut();
-          displayToastMessage("Paramedic details haven't been verified yet. Try Again later.", context);
-        }
-      });
-    }
-    else
-    {
-      Navigator.pop(context);
-      displayToastMessage("Error Occurred, can not be Signed-in.", context);
-    }
-  }
-
-  void loginAndAuthenticateParamedic(BuildContext context) async
-  {
-
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context)
-        {
-          return ProgressDialog(message: "Authenticating, Please wait...",);
-        }
-    );
-
-    final User firebaseUser = (await _firebaseAuth.signInWithEmailAndPassword(email: emailTextEditingController.text, password: passwordTextEditingController.text).catchError((errMsg)
-    {
-      Navigator.pop(context);
-      displayToastMessage("Error: " + errMsg.toString(), context);
-    })).user;
-
-    if(firebaseUser != null)
-    {
-      paramedicsRef.child(firebaseUser.uid).once().then((DataSnapshot snap){
-        if(snap.value != null)
-        {
-          currentfirebaseUser = firebaseUser;
-          Navigator.pushNamedAndRemoveUntil(context, MainScreen.idScreen, (route) => false);
-          displayToastMessage("Successfully logged in.", context);
-        }
-        else
-        {
-          Navigator.pop(context);
-          _firebaseAuth.signOut();
-          displayToastMessage("No record exists for this paramedic. Please create new account.", context);
+          if (!datasnap.value["is_verified"]) {
+            Navigator.pop(context);
+            displayToastMessage(
+                "Paramedic details haven't been verified yet. Try Again later.",
+                context);
+          } else {
+            paramedicsRef
+                .child(firebaseUser.uid)
+                .once()
+                .then((DataSnapshot snap) {
+              if (snap.value != null) {
+                currentfirebaseUser = firebaseUser;
+                Navigator.pushNamedAndRemoveUntil(
+                    context, MainScreen.idScreen, (route) => false);
+                displayToastMessage("Successfully logged in.", context);
+              } else {
+                Navigator.pop(context);
+                _firebaseAuth.signOut();
+                displayToastMessage(
+                    "No record exists for this paramedic. Please create new account.",
+                    context);
+              }
+            });
+          }
         }
       });
-    }
-    else
-    {
-      Navigator.pop(context);
-      displayToastMessage("Error Occurred, can not be Signed-in.", context);
     }
   }
 }
-
