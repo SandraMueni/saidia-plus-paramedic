@@ -19,10 +19,13 @@ class AppData extends ChangeNotifier
   int get allTrips{
     return tripCounter;
   }
+  dynamic get history{
+    return tripHistoryDataList;
+  }
 
   Future<void> fetchAllHistory()async{
     //retrieve and display Earnings
-    paramedicsRef.child(currentfirebaseUser.uid).child("earnings").once().then((DataSnapshot dataSnapshot)
+    await paramedicsRef.child(currentfirebaseUser.uid).child("earnings").once().then((DataSnapshot dataSnapshot)
     {
       if(dataSnapshot.value != null)
       {
@@ -31,7 +34,7 @@ class AppData extends ChangeNotifier
       }
     });
     //retrieve and display Earnings
-    paramedicsRef.child(currentfirebaseUser.uid).child("history").once().then((DataSnapshot dataSnapshot)
+    await paramedicsRef.child(currentfirebaseUser.uid).child("history").once().then((DataSnapshot dataSnapshot)
     {
       if(dataSnapshot.value != null)
       {

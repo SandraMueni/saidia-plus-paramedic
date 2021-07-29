@@ -475,6 +475,7 @@ class _NewTripScreenState extends State<NewTripScreen>
     String tripRequestId = widget.tripDetails.victimRequestId;
     newRequestRef.child(tripRequestId).child("charges").set(fareAmount.toString());
     newRequestRef.child(tripRequestId).child("status").set("ended");
+    emergencyRequestRef.set("searching");
     tripStreamSubscription.cancel();
 
     showDialog(

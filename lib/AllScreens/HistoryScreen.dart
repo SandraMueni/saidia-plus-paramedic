@@ -3,12 +3,41 @@ import 'package:paramedic_app/DataHandler/appData.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../DataHandler/appData.dart';
+
 class HistoryScreen extends StatefulWidget {
   @override
   _HistoryScreenState createState() => _HistoryScreenState();
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
+
+/*  var _isInit = true;
+  var _isLoading = false;
+  var earnings;
+  @override
+  void didChangeDependencies() {
+    if(_isInit){
+      setState(() {
+        _isLoading = true;
+      });
+
+      Provider.of<AppData>(context, listen: false).history.then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }*/
+@override
+  void initState() {
+    // ignore: unnecessary_statements
+    Provider.of<AppData>(context, listen: false).tripHistoryDataList;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,19 +54,18 @@ class _HistoryScreenState extends State<HistoryScreen> {
       ),
 
       body: ListView.separated(
-        padding: EdgeInsets.all(0),
-        itemBuilder: (context, index)
-        {
-          return HistoryItem(
-            history: Provider.of<AppData>(context, listen: false).tripHistoryDataList[index],
-          );
-        },
-        separatorBuilder: (BuildContext context, int index) => Divider(thickness: 3.0, height: 3.0,),
-        itemCount: Provider.of<AppData>(context, listen: false).tripHistoryDataList.length,
-        physics: ClampingScrollPhysics(),
-        shrinkWrap: true,
-      ),
-
-    );
+            padding: EdgeInsets.all(0),
+            itemBuilder: (context, index)
+            {
+              return HistoryItem(
+                history: Provider.of<AppData>(context, listen: false).tripHistoryDataList[index],
+              );
+            },
+            separatorBuilder: (BuildContext context, int index) => Divider(thickness: 3.0, height: 3.0,),
+            itemCount: Provider.of<AppData>(context, listen: false).tripHistoryDataList.length,
+            physics: ClampingScrollPhysics(),
+            shrinkWrap: true,
+          ),
+      );
   }
 }

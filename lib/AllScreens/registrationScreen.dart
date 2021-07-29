@@ -214,6 +214,7 @@ class RegistrationScreen extends StatelessWidget
       ),
     );
   }
+
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   void registerNewParamedic(BuildContext context) async
@@ -243,7 +244,7 @@ class RegistrationScreen extends StatelessWidget
         "paramedic_name": nameTextEditingController.text.trim(),
         "paramedic_email": emailTextEditingController.text.trim(),
         "paramedic_contact": phoneTextEditingController.text.trim(),
-        "is_verfied": false,
+        "is_verified": false,
       };
 
       paramedicsRef.child(firebaseUser.uid).set(paramedicDataMap);

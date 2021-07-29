@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:paramedic_app/AllScreens/loginScreen.dart';
 import 'package:paramedic_app/configMaps.dart';
 import 'package:paramedic_app/main.dart';
-import 'mainscreen.dart';
 import 'package:paramedic_app/AllScreens/registrationScreen.dart';
 
 class AmbulanceInfoScreen extends StatelessWidget
@@ -60,8 +60,8 @@ class AmbulanceInfoScreen extends StatelessWidget
                       value: selectedAmbulanceType,
                       onChanged: (newValue)
                       {
-                          selectedAmbulanceType = newValue;
-                          displayToastMessage(selectedAmbulanceType + " selected", context);
+                        selectedAmbulanceType = newValue;
+                        displayToastMessage(selectedAmbulanceType + " selected", context);
                       },
                       items: ambulanceTypesList.map((ambulance)
                       {
@@ -119,6 +119,8 @@ class AmbulanceInfoScreen extends StatelessWidget
     );
   }
 
+
+
   void saveParamedicAmbulanceInfo(context)
   {
     String paramedicId = currentfirebaseUser.uid;
@@ -132,7 +134,7 @@ class AmbulanceInfoScreen extends StatelessWidget
 
     paramedicsRef.child(paramedicId).child("ambulance_details").set(ambulanceInfoMap);
 
-    Navigator.pushNamedAndRemoveUntil(context, MainScreen.idScreen, (route) => false);
+    Navigator.pushNamedAndRemoveUntil(context, LoginScreen.idScreen, (route) => false);
   }
 
 }

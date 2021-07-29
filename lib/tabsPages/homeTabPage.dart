@@ -22,7 +22,7 @@ class HomeTabPage extends StatefulWidget {
   _HomeTabPageState createState() => _HomeTabPageState();
 }
 
-class _HomeTabPageState extends State<HomeTabPage> {
+class _HomeTabPageState extends State<HomeTabPage> with AutomaticKeepAliveClientMixin<HomeTabPage> {
   Completer<GoogleMapController> _controllerGoogleMap = Completer();
 
   GoogleMapController newGoogleMapController;
@@ -204,4 +204,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
   void _restartApp() async {
     FlutterRestart.restartApp();
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
