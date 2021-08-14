@@ -1,6 +1,6 @@
 # paramedic_app
 
-A new Flutter project.
+The paramedic flutter application for Saidia Plus+
 
 ## Getting Started
 
